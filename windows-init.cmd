@@ -57,10 +57,7 @@ for /f %%i in (window_program.txt) do (
 )
 
 :: 安装node包
-npm install npm@latest -g
-npm install typescript -g
-npm install yo generator-code -g
-for /f %%i in (pip.txt) do (
+for /f %%i in (npm.txt) do (
     npm install -g %%i
 )
 
