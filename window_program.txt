@@ -1,0 +1,17 @@
+Google Chrome
+Go Programming Language
+Python 3
+Microsoft Visual Studio Code
+Node.js LTS
+Microsoft To Do: Lists, Tasks & Reminders
+便签
+7-Zip
+钉钉
+WeChat
+微信开发者工具
+腾讯QQ
+potato chat
+TortoiseSVN
+Git
+cmake
+utools

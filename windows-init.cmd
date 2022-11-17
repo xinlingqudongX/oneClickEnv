@@ -60,17 +60,10 @@ for %%i in (%download_name_list%) do (
 npm install npm@latest -g
 npm install typescript -g
 npm install yo generator-code -g
+for /f %%i in (pip.txt) do npm install -g %%i
 
 :: 安装python包
-pip install requests
-pip install pyinstaller
-pip install pandas
-pip install numpy
-pip install jieba
-pip install Nuitka
-pip install tqdm
-pip install pywin32
-pip install PyYAML
+for /f %%i in (pip.txt) do pip install %%i
 
 
 ::  添加npm配置
