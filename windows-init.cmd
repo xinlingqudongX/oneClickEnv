@@ -39,10 +39,10 @@ if %errorlevel% == 0 (
 
 :: 下载程序
 echo 安装程序
-set download_name_list="Google Chrome" "Go Programming Language" "Python 3" "Microsoft Visual Studio Code" "Node.js LTS" "Microsoft To Do: Lists, Tasks & Reminders" "便签" "7-Zip" "钉钉" "WeChat" "微信开发者工具" "腾讯QQ" "potato chat" "TortoiseSVN" "Git" "cmake" "utools"
+@REM set download_name_list="Google Chrome" "Go Programming Language" "Python 3" "Microsoft Visual Studio Code" "Node.js LTS" "Microsoft To Do: Lists, Tasks & Reminders" "便签" "7-Zip" "钉钉" "WeChat" "微信开发者工具" "腾讯QQ" "potato chat" "TortoiseSVN" "Git" "cmake" "utools"
 @REM set download_name_list="Google Chrome"
 @REM echo %download_name_list%
-for %%i in (%download_name_list%) do (
+for /f %%i in (window_program.txt) do (
     @REM echo %%i
     @REM echo 安装%%i
     
@@ -60,11 +60,14 @@ for %%i in (%download_name_list%) do (
 npm install npm@latest -g
 npm install typescript -g
 npm install yo generator-code -g
-for /f %%i in (pip.txt) do npm install -g %%i
+for /f %%i in (pip.txt) do (
+    npm install -g %%i
+)
 
 :: 安装python包
-for /f %%i in (pip.txt) do pip install %%i
-
+for /f %%i in (pip.txt) do (
+    pip install %%i
+)
 
 ::  添加npm配置
 echo registry=https://registry.npmjs.org/ > %USERPROFILE%/.npmrc
