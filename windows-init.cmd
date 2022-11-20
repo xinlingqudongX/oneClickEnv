@@ -74,6 +74,7 @@ echo ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ >> %USERPROFILE%/.n
 echo "[http]" >> %USERPROFILE%/.gitconfig
 echo "    sslVerify = false" >> %USERPROFILE%/.gitconfig
 echo "    sslVersion = tlsv1.2" >> %USERPROFILE%/.gitconfig
+echo "    postBuffer = 524288000" >> %USERPROFILE%/.gitconfig
 
 :: 关闭执行窗口并退出
 pause
