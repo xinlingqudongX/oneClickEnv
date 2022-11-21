@@ -1,2 +1,3 @@
 npm@latest
 typescript@latest
+@vue/cli
