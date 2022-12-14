@@ -1,4 +1,5 @@
 @echo off
+chcp 65001
 :: 开始执行脚本
 SETLOCAL ENABLEEXTENSIONS
 SET script_name=%~n0
@@ -19,13 +20,13 @@ echo 当前运行路径是：%CD%
 echo 已获取管理员权限
 @REM pause
 
-reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" >NUL
-if %errorlevel% == 0 (
-    echo 已配置系统CMD终端编码格式
-) else (
-    echo 配置系统CMD终端编码格式
-    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" /t REG_SZ /d "chcp 65001"
-)
+@REM reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" >NUL
+@REM if %errorlevel% == 0 (
+@REM     echo 已配置系统CMD终端编码格式
+@REM ) else (
+@REM     echo 配置系统CMD终端编码格式
+@REM     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" /t REG_SZ /d "chcp 65001"
+@REM )
 
 @REM 判断winget是否安装
 winget >NUL
@@ -33,8 +34,9 @@ if %errorlevel% == 0 (
     echo 已安装winget
 ) else (
     echo 安装winget
-    bitsadmin /transfer download /download /priority foreground https://objects.githubusercontent.com/github-production-release-asset-2e65be/197275130/861795c6-2f61-44e0-8c7e-66ed2b5583c1?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T023759Z&X-Amz-Expires=300&X-Amz-Signature=df884e81debb038b97fdb0cb134bab418661cfb11fbdca40df3eb46e96c19e46&X-Amz-SignedHeaders=host&actor_id=26372348&key_id=0&repo_id=197275130&response-content-disposition=attachment%3B%20filename%3DMicrosoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle&response-content-type=application%2Foctet-stream %CD%/winget.msixbundle
+    bitsadmin /transfer download /download /priority foreground "https://github.com/microsoft/winget-cli/releases/download/v1.4.3132-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" %CD%/winget.msixbundle
     @REM bitsadmin /monitor
+    winget.msixbundle
 )
 
 :: 下载程序
@@ -43,8 +45,8 @@ echo 安装程序
 @REM set download_name_list="Google Chrome"
 @REM echo %download_name_list%
 for /f %%i in (window_program.txt) do (
-    @REM echo %%i
-    @REM echo 安装%%i
+    echo %%i
+    echo 安装%%i
     
     winget show %%i >nul
 
@@ -71,12 +73,12 @@ echo registry=https://registry.npmjs.org/ > %USERPROFILE%/.npmrc
 echo ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ >> %USERPROFILE%/.npmrc
 
 ::  添加Git配置
-echo "[http]" >> %USERPROFILE%/.gitconfig
-echo "    sslVerify = false" >> %USERPROFILE%/.gitconfig
-echo "    sslVersion = tlsv1.2" >> %USERPROFILE%/.gitconfig
-echo "    postBuffer = 524288000" >> %USERPROFILE%/.gitconfig
-echo "[core]" >> %USERPROFILE%/.gitconfig
-echo "    sparsecheckout = true" >> %USERPROFILE%/.gitconfig
+echo [http]>> %USERPROFILE%/.gitconfig
+echo     sslVerify = false>> %USERPROFILE%/.gitconfig
+echo     sslVersion = tlsv1.2>> %USERPROFILE%/.gitconfig
+echo     postBuffer = 524288000>> %USERPROFILE%/.gitconfig
+echo [core] >> %USERPROFILE%/.gitconfig
+echo     sparsecheckout = true>> %USERPROFILE%/.gitconfig
 
 :: 关闭执行窗口并退出
 pause
