@@ -77,8 +77,9 @@ echo [http]>> %USERPROFILE%/.gitconfig
 echo     sslVerify = false>> %USERPROFILE%/.gitconfig
 echo     sslVersion = tlsv1.2>> %USERPROFILE%/.gitconfig
 echo     postBuffer = 524288000>> %USERPROFILE%/.gitconfig
-echo [core] >> %USERPROFILE%/.gitconfig
+echo [core]>> %USERPROFILE%/.gitconfig
 echo     sparsecheckout = true>> %USERPROFILE%/.gitconfig
+echo     autocrlf = false>> %USERPROFILE%/.gitconfig
 
 :: 关闭执行窗口并退出
 pause
