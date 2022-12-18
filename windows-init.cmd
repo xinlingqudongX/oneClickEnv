@@ -69,7 +69,7 @@ for /f %%i in (pip.txt) do (
 )
 
 ::  添加npm配置
-echo registry=https://registry.npmjs.org/ > %USERPROFILE%/.npmrc
+echo registry=https://registry.npmjs.org/ >> %USERPROFILE%/.npmrc
 echo ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ >> %USERPROFILE%/.npmrc
 
 ::  添加Git配置
@@ -80,6 +80,9 @@ echo     postBuffer = 524288000>> %USERPROFILE%/.gitconfig
 echo [core]>> %USERPROFILE%/.gitconfig
 echo     sparsecheckout = true>> %USERPROFILE%/.gitconfig
 echo     autocrlf = false>> %USERPROFILE%/.gitconfig
+
+:: Go环境变量配置
+go env -w GO111MODULE=on
 
 :: 关闭执行窗口并退出
 pause
