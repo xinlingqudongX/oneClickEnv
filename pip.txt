@@ -7,3 +7,4 @@ Nuitka
 tqdm
 pywin32
 PyYAML
+pyenv
