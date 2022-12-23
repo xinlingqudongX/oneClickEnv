@@ -9,3 +9,4 @@ pywin32
 PyYAML
 pyenv
 lxml
+jieba
