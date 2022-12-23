@@ -2,3 +2,4 @@ npm@latest
 typescript@latest
 @vue/cli
 docsify-cli
+pnpm
