@@ -10,3 +10,4 @@ PyYAML
 pyenv
 lxml
 jieba
+schedule
