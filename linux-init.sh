@@ -40,7 +40,9 @@ fi
 
 #   minio检查和安装
 if checkInstalled minio; then
-    echo -e '\033[31m正在安装Minio\033[0m'
+    echo -e '\033[32m正在安装Minio\033[0m'
+    wget https://dl.min.io/server/minio/release/darwin-amd64/minio
+    chmod +x minio
 fi
 
 #   宝塔检查和安装
