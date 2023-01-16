@@ -50,12 +50,12 @@ if notInstalled mysql; then
     echo -e '\033[31m正在安装Mysql\033[0m'
 fi
 
-# #   minio检查和安装
-# if ! checkExists current_dir + './minio'; then
-#     echo -e '\033[32m正在安装Minio\033[0m'
-#     wget https://dl.min.io/server/minio/release/darwin-amd64/minio
-#     chmod +x minio
-# fi
+#   minio检查和安装
+if ! checkExists current_dir + './minio'; then
+    echo -e '\033[32m正在安装Minio\033[0m'
+    wget https://dl.min.io/server/minio/release/darwin-amd64/minio
+    chmod +x minio
+fi
 
 #   Gvm检查和安装
 if notInstalled gvm; then
