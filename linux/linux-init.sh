@@ -5,7 +5,7 @@ nvm_version=0.39.3
 
 #   检查服务是否安装
 checkInstalled() {
-    if ! $1 >/dev/null 2>&1; then
+    if ! command -v "$1" >/dev/null 2>&1; then
         echo -e "\033[31m未安装$1\033[0m"
         return 0
     else
@@ -45,7 +45,12 @@ if checkInstalled minio; then
     chmod +x minio
 fi
 
-#   宝塔检查和安装
-if echeckInstalled baota; then
-    wget -O install.sh http://download.bt.cn/install/install_6.0.sh && sh install.sh
+#   Gvm检查和安装
+if checkInstalled gvm; then
+    bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 fi
+
+# #   宝塔检查和安装
+# if echeckInstalled baota; then
+#     wget -O install.sh http://download.bt.cn/install/install_6.0.sh && sh install.sh
+# fi

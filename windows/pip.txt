@@ -1,0 +1,13 @@
+requests
+pyinstaller
+pandas
+numpy
+jieba
+Nuitka
+tqdm
+pywin32
+PyYAML
+pyenv
+lxml
+jieba
+schedule
