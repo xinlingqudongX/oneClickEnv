@@ -25,7 +25,7 @@ echo 已获取管理员权限
 @REM     echo 已配置系统CMD终端编码格式
 @REM ) else (
 @REM     echo 配置系统CMD终端编码格式
-@REM     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" /t REG_SZ /d "chcp 65001>null"
+@REM     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" /t REG_SZ /d "chcp 65001>NUL"
 @REM )
 
 @REM 判断winget是否安装
