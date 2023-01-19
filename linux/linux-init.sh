@@ -4,6 +4,12 @@
 nvm_version=0.39.3
 #   定义当前目录路径
 current_dir=$(pwd)
+#   定义当前Node版本
+current_node_version=16
+#   定义当前系统版本
+centos_release=$(cut -d ' ' -f 4 /etc/centos-release | cut -d '.' -f 1)
+#   定义当前系统架构
+centos_arch=$(arch)
 
 #   检查服务是否安装
 notInstalled() {
@@ -36,7 +42,13 @@ fi
 #   node检查和安装
 if notInstalled node; then
     echo -e '\033[31m正在安装Node\033[0m'
-    nvm install 16.19.0
+    nvm install $current_node_version
+    nvm use $current_node_version
+    #   当前Linux只能使用16
+    # curl -fsSL "https://rpm.nodesource.com/setup_$current_node_version.x" | sudo bash -
+    # sudo yum install nodejs -y
+    # sudo npm install npm@latest -g
+    npm i -g typescript
 fi
 
 #   svn检查和安装
@@ -51,7 +63,7 @@ if notInstalled mysql; then
 fi
 
 #   minio检查和安装
-if ! checkExists current_dir + './minio'; then
+if ! checkExists "$current_dir/minio"; then
     echo -e '\033[32m正在安装Minio\033[0m'
     wget https://dl.min.io/server/minio/release/darwin-amd64/minio
     chmod +x minio
@@ -71,7 +83,7 @@ if notInstalled pyenv; then
     #   添加环境变量和命令处理
     {
         echo "export PYENV_ROOT=\"$HOME/.pyenv\""
-        echo "export PATH=\"$PYENV_ROOT/bin:$PATH\""
+        echo "command -v pyenv >/dev/null || export PATH=\"$PYENV_ROOT/bin:$PATH\""
         echo "eval \"$(pyenv init -)\""
     } >>~/.bash_profile
 fi
@@ -79,3 +91,19 @@ fi
 # if notInstalled baota; then
 #     wget -O install.sh http://download.bt.cn/install/install_6.0.sh && sh install.sh
 # fi
+
+#   检查安装Nginx
+if notInstalled nginx; then
+    echo -e '\033[32m正在安装Nginx\033[0m'
+    sudo yum install -y nginx
+fi
+
+#   检查安装Nginx Unit
+if notInstalled unit; then
+    echo "[unit]
+name=unit repo
+baseurl=http://nginx.org/packages/mainline/centos/$centos_release/$centos_arch/
+gpgcheck=0
+enabled=1" >/etc/yum.repos.d/unit.repo
+    yum install -y unit
+fi
