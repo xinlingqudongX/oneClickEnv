@@ -49,12 +49,26 @@ if notInstalled node; then
     # sudo yum install nodejs -y
     # sudo npm install npm@latest -g
     npm i -g typescript
+    npm config set registry https://registry.npmjs.org
+    npm config set ELECTRON_MIRROR http://npm.taobao.org/mirrors/electron/
 fi
 
 #   svn检查和安装
 if notInstalled svn; then
     echo -e '\033[31m正在安装SVN\033[0m'
     sudo yum install -y subversion
+fi
+
+#   git检查和安装
+if notInstalled git; then
+    sudo yum install -y git
+
+    #   添加git配置
+    git config --global http.sslVerify false
+    git config --global http.sslVersion tlsv1.2
+    git config --global http.postBuffer 524288000
+    git config --global core.sparsecheckout true
+    git config --global core.autocrlf false
 fi
 
 #   mysql检查和安装
@@ -105,5 +119,5 @@ name=unit repo
 baseurl=http://nginx.org/packages/mainline/centos/$centos_release/$centos_arch/
 gpgcheck=0
 enabled=1" >/etc/yum.repos.d/unit.repo
-    yum install -y unit
+    sudo yum install -y unit
 fi
