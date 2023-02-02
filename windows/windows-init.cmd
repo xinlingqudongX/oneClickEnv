@@ -84,6 +84,9 @@ echo     autocrlf = false>> %USERPROFILE%/.gitconfig
 :: Go环境变量配置
 go env -w GO111MODULE=on
 
+:: Python环境变量配置
+setx "PYTHONIOENCODING" "UTF-8"
+
 :: 关闭执行窗口并退出
 pause
 exit
