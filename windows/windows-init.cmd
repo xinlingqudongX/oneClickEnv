@@ -20,13 +20,13 @@ echo 当前运行路径是：%CD%
 echo 已获取管理员权限
 @REM pause
 
-@REM reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" >NUL
-@REM if %errorlevel% == 0 (
-@REM     echo 已配置系统CMD终端编码格式
-@REM ) else (
-@REM     echo 配置系统CMD终端编码格式
-@REM     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" /t REG_SZ /d "chcp 65001>NUL"
-@REM )
+reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" >NUL
+if %errorlevel% == 0 (
+    echo 已配置系统CMD终端编码格式
+) else (
+    echo 配置系统CMD终端编码格式
+    reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" /t REG_SZ /d "chcp 65001>NUL"
+)
 
 @REM 判断winget是否安装
 winget >NUL
@@ -84,8 +84,59 @@ echo     autocrlf = false>> %USERPROFILE%/.gitconfig
 :: Go环境变量配置
 go env -w GO111MODULE=on
 
-:: Python环境变量配置
+:: Python环境变量配置 用户环境变量
 setx "PYTHONIOENCODING" "UTF-8"
+
+@REM 判断gvm是否安装
+gvm >NUL
+if %errorlevel% == 0 (
+    echo 已安装gvm
+) else (
+    echo 安装gvm
+    bitsadmin /transfer download /download /priority foreground "https://raw.githubusercontent.com/voidint/g/master/install.ps1" %CD%/gvm_install.ps1
+    @REM bitsadmin /monitor
+
+    PowerShell -ExecutionPolicy Bypass -File gvm_install.ps1
+
+    rename %HOME%\.g\bin\g.exe gvm.exe
+    ::  设置环境变量
+    setx "GOROOT" "%HOME%\.g\go"
+    setx "PATH" "%PATH%;%HOME%\.g\bin;%GOROOT%\bin"
+
+    echo 删除安装文件
+    del gvm_install.ps1
+)
+
+
+echo 安装Go 1.20
+gvm install 1.20
+
+echo 安装Pyenv
+@REM 判断pyenv是否安装
+pyenv >NUL
+if %errorlevel% == 0 (
+    echo 已安装Pyenv
+) else (
+    echo 安装Pyenv
+    PowerShell Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
+)
+
+@REM 判断nvm是否安装
+nvm >NUL
+if %errorlevel% == 0 (
+    echo 已安装gvm
+) else (
+    echo 安装nvm
+    bitsadmin /transfer download /download /priority foreground "https://github.com/coreybutler/nvm-windows/releases/download/1.1.10/nvm-setup.exe" %CD%/nvm-setup.exe
+    @REM bitsadmin /monitor
+
+    echo 开始安装nvm
+    nvm-setup.exe
+
+    echo 删除安装文件
+    del nvm-setup.exe
+)
+
 
 :: 关闭执行窗口并退出
 pause

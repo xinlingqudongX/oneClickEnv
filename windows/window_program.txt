@@ -1,8 +1,5 @@
 Google Chrome
-Go Programming Language
-Python 3
 Microsoft Visual Studio Code
-Node.js LTS
 Microsoft To Do: Lists, Tasks & Reminders
 便签
 7-Zip
