@@ -10,6 +10,10 @@ current_node_version=16
 centos_release=$(cut -d ' ' -f 4 /etc/centos-release | cut -d '.' -f 1)
 #   定义当前系统架构
 centos_arch=$(arch)
+#   定义gcc下载地址
+#   定义make下载地址
+gcc_ftp=https://ftp.gnu.org/gnu/gcc/
+make_ftp=https://ftp.gnu.org/gnu/make/
 
 #   检查服务是否安装
 notInstalled() {
@@ -30,6 +34,46 @@ checkExists() {
     else
         return 1
     fi
+}
+
+#   升级gcc
+gccUpgrade() {
+    #   获取gcc最新版本
+    gcc_versions=$(curl $gcc_ftp | grep -ioP "gcc-[0-9]+.[0-9]+.[0-9]+" | sort -V | uniq)
+    echo "$gcc_versions"
+    latest_gcc_version=$(echo "$gcc_versions" | awk -F " " '{ print $NF}')
+    echo "gcc最新版本为:$latest_gcc_version"
+
+    echo "下载"
+    wget "http://ftp.gnu.org/gnu/gcc/$latest_gcc_version/$latest_gcc_version.tar.gz"
+    tar -zxvf "$latest_gcc_version"
+
+    cd "$latest_gcc_version" || return
+    ./contrib/download_prerquisites
+    mkdir build
+    cd build || return
+    ../configure "--prefix=$latest_gcc_version" --enable-bootstrap --enable-languages=c,c++ --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib
+}
+
+#   升级make
+makeUpgrade() {
+    #   获取make最新版本
+    make_versions=$(curl $make_ftp | grep -ioP "make-[0-9]+.[0-9]+(.[0-9])?.tar.gz" | sort -V | uniq)
+    echo "$make_versions"
+    latest_make_version=$(echo "$make_versions" | awk -F " " '{ print $NF}')
+    echo "gcc最新版本为:$latest_make_version"
+
+    echo "下载"
+    wget "http://ftp.gnu.org/gnu/gcc/$latest_make_version/$latest_make_version.tar.gz"
+    tar -zxvf "$latest_make_version"
+    cd "$latest_make_version" || return
+    ./configure --prefix=/usr
+    type make
+    make check
+    make install
+    #   此时位置可能还需要执行提示的一些命令
+
+    make -v
 }
 
 #   nvm检查和安装
