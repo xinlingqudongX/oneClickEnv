@@ -137,6 +137,18 @@ if %errorlevel% == 0 (
     del nvm-setup.exe
 )
 
+@REM 判断是否安装DBeaver
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall|find /i "DBeaver">nul 2>nul
+if %errorlevel% == 0 (
+    echo 已安装DBeaver
+) else (
+    echo 安装DBeaver
+    bitsadmin /transfer download /download /priority foreground "https://dbeaver.io/files/dbeaver-ce-latest-x86_64-setup.exe" %CD%/dbeaver.exe
+    @REM bitsadmin /monitor
+
+    echo 开始安装DBeaver
+    del dbeaver.exe
+)
 
 :: 关闭执行窗口并退出
 pause
