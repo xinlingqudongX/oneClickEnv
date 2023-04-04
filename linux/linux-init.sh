@@ -16,7 +16,7 @@ gcc_ftp=https://ftp.gnu.org/gnu/gcc/
 make_ftp=https://ftp.gnu.org/gnu/make/
 
 #   检查服务是否安装
-notInstalled() {
+function notInstalled() {
     if ! command -v "$1" >/dev/null 2>&1; then
         echo -e "\033[31m未安装$1\033[0m"
         return 0
@@ -27,7 +27,7 @@ notInstalled() {
 }
 
 #   检查文件是否存在
-checkExists() {
+function checkExists() {
     if [ -f "$1" ]; then
         echo -e "\033[31m文件不存在:$1\033[0m"
         return 0
@@ -37,7 +37,7 @@ checkExists() {
 }
 
 #   升级gcc
-gccUpgrade() {
+function gccUpgrade() {
     #   获取gcc最新版本
     gcc_versions=$(curl $gcc_ftp | grep -ioP "gcc-[0-9]+.[0-9]+.[0-9]+" | sort -V | uniq)
     echo "$gcc_versions"
@@ -56,7 +56,7 @@ gccUpgrade() {
 }
 
 #   升级make
-makeUpgrade() {
+function makeUpgrade() {
     #   获取make最新版本
     make_versions=$(curl $make_ftp | grep -ioP "make-[0-9]+.[0-9]+(.[0-9])?.tar.gz" | sort -V | uniq)
     echo "$make_versions"
@@ -76,6 +76,58 @@ makeUpgrade() {
     make -v
 }
 
+#   升级openssl
+function opensslUpgrade() {
+    openssl_version="3.1.0"
+    openssl_download="https://www.openssl.org/source/openssl-$openssl_version.tar.gz"
+    wget $openssl_download
+    tar -zxvf "openssl-$openssl_version.tar.gz"
+    cd "openssl-$openssl_version" || exit
+    ./config
+    make
+    make install
+
+    ln -s /usr/local/lib64/libssl.so.3 /usr/lib64/libssl.so.3
+    ln -s /usr/local/lib64/libcrypto.so.3 /usr/lib64/libcrypto.so.3
+}
+
+#   获取系统信息
+function systemInfo() {
+    # 获取存储占用
+    storage_usage=$(df -h | awk '$NF=="/"{printf "%s", $5}')
+
+    # 获取CPU核数
+    cpu_cores=$(grep -c ^processor /proc/cpuinfo)
+
+    # 获取CentOS版本和系统版本
+    os_version=$(cat /etc/redhat-release)
+    kernel_version=$(uname -r)
+
+    # 获取内存大小
+    memory_size=$(free -h | awk '/^Mem:/{print $2}')
+
+    # 打印输出系统信息
+    echo "存储占用：$storage_usage"
+    echo "CPU核数：$cpu_cores"
+    echo "CentOS版本：$os_version"
+    echo "系统版本：$kernel_version"
+    echo "内存大小：$memory_size"
+}
+
+#   输出日志
+echoLogs() {
+    echo "$1" >linux-init.logs
+}
+
+#   安装数据库
+function installDatabase() {
+    echo "请选择要安装的数据库，使用逗号分隔多个选项，或输入q退出"
+    echo "1. Redis"
+    echo "2. MongoDB"
+    echo "3. MySQL"
+    echo "4. PostgreSQL"
+    echo "5. MariaDB"
+}
 #   nvm检查和安装
 if notInstalled nvm; then
     echo -e '\033[32m正在安装nvm\033[0m'
