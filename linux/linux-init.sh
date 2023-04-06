@@ -83,7 +83,7 @@ function opensslUpgrade() {
     wget $openssl_download
     tar -zxvf "openssl-$openssl_version.tar.gz"
     cd "openssl-$openssl_version" || exit
-    ./config
+    ./config --prefix=/usr/local/openssl
     make
     make install
 
