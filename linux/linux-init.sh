@@ -128,6 +128,21 @@ function installDatabase() {
     echo "4. PostgreSQL"
     echo "5. MariaDB"
 }
+
+#   安装升级Python
+function PythonUpgrade() {
+    py_version=${1:- "3.10.8"}
+    wget "https://www.python.org/ftp/python/$py_version/Python-$py_version.tgz"
+    tar -xzvf "Python-$py_version.tgz"
+    cd "Python-$py_version" || return
+    ./configure --prefix=/usr/local/python3 --with-openssl=/usr/local/openssl --enable-optimizations –with-system-ffi --with-computed-gotos --enable-loadable-sqlite-extensions
+    make && make install
+    mv /usr/bin/python3 /usr/bin/python3.bak
+    mv /usr/bin/pip3 /usr/bin/pip3.bak
+    ln -s /usr/local/python3/bin/python3 /usr/bin/python3
+    ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3
+}
+
 #   nvm检查和安装
 if notInstalled nvm; then
     echo -e '\033[32m正在安装nvm\033[0m'
@@ -196,6 +211,7 @@ if notInstalled pyenv; then
         echo "command -v pyenv >/dev/null || export PATH=\"$PYENV_ROOT/bin:$PATH\""
         echo "eval \"$(pyenv init -)\""
     } >>~/.bash_profile
+    source ~/.bash_profile
 fi
 # #   宝塔检查和安装
 # if notInstalled baota; then

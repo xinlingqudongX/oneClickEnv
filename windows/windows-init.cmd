@@ -150,6 +150,10 @@ if %errorlevel% == 0 (
     del dbeaver.exe
 )
 
+:initFlutter
+    rem 函数
+
+call :initFlutter
 :: 关闭执行窗口并退出
 pause
 exit
