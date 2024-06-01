@@ -44,7 +44,7 @@ echo 安装程序
 @REM set download_name_list="Google Chrome" "Go Programming Language" "Python 3" "Microsoft Visual Studio Code" "Node.js LTS" "Microsoft To Do: Lists, Tasks & Reminders" "便签" "7-Zip" "钉钉" "WeChat" "微信开发者工具" "腾讯QQ" "potato chat" "TortoiseSVN" "Git" "cmake" "utools"
 @REM set download_name_list="Google Chrome"
 @REM echo %download_name_list%
-for /f %%i in (window_program.txt) do (
+for /f %%i in (window_developer.txt) do (
     echo %%i
     echo 安装%%i
     
@@ -56,16 +56,6 @@ for /f %%i in (window_program.txt) do (
         echo 开始安装%%i
         winget install %%i
     )
-)
-
-:: 安装node包
-for /f %%i in (npm.txt) do (
-    npm install -g %%i
-)
-
-:: 安装python包
-for /f %%i in (pip.txt) do (
-    pip install %%i
 )
 
 ::  添加npm配置
@@ -87,56 +77,6 @@ go env -w GO111MODULE=on
 :: Python环境变量配置 用户环境变量
 setx "PYTHONIOENCODING" "UTF-8"
 
-@REM 判断gvm是否安装
-gvm >NUL
-if %errorlevel% == 0 (
-    echo 已安装gvm
-) else (
-    echo 安装gvm
-    bitsadmin /transfer download /download /priority foreground "https://raw.githubusercontent.com/voidint/g/master/install.ps1" %CD%/gvm_install.ps1
-    @REM bitsadmin /monitor
-
-    PowerShell -ExecutionPolicy Bypass -File gvm_install.ps1
-
-    rename %HOME%\.g\bin\g.exe gvm.exe
-    ::  设置环境变量
-    setx "GOROOT" "%HOME%\.g\go"
-    setx "PATH" "%PATH%;%HOME%\.g\bin;%GOROOT%\bin"
-
-    echo 删除安装文件
-    del gvm_install.ps1
-)
-
-
-echo 安装Go 1.20
-gvm install 1.20
-
-echo 安装Pyenv
-@REM 判断pyenv是否安装
-pyenv >NUL
-if %errorlevel% == 0 (
-    echo 已安装Pyenv
-) else (
-    echo 安装Pyenv
-    PowerShell Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
-)
-
-@REM 判断nvm是否安装
-nvm >NUL
-if %errorlevel% == 0 (
-    echo 已安装gvm
-) else (
-    echo 安装nvm
-    bitsadmin /transfer download /download /priority foreground "https://github.com/coreybutler/nvm-windows/releases/download/1.1.10/nvm-setup.exe" %CD%/nvm-setup.exe
-    @REM bitsadmin /monitor
-
-    echo 开始安装nvm
-    nvm-setup.exe
-
-    echo 删除安装文件
-    del nvm-setup.exe
-)
-
 @REM 判断是否安装DBeaver
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall|find /i "DBeaver">nul 2>nul
 if %errorlevel% == 0 (
@@ -150,10 +90,55 @@ if %errorlevel% == 0 (
     del dbeaver.exe
 )
 
+@REM 判断是否安装vfox
+vfox >NUL
+if %errorlevel% == 0 (
+    echo 已安装vfox
+) else (
+    echo 安装vfox
+    winget install vfox
+    PowerShell New-Item -Type File -Path $PROFILE
+    PowerShell Invoke-Item $PROFILE # 打开profile
+
+    echo 将下面一行添加到你的 $PROFILE 文件末尾并保存
+    echo Invoke-Expression "$(vfox activate pwsh)"
+)
+
+rem 函数定义，用于询问用户并根据回答执行命令
+:askAndExecute
+set /p answer=是否安装%1? (y/n):
+if /i "%answer%"=="y" (
+    echo 正在执行:vfox add %1
+    rem 这里替换为实际的安装命令，比如使用choco、npm、apt-get等
+    vfox add %1
+    vfox install %1
+) else (
+    echo 跳过安装%1
+)
+
 :initFlutter
     rem 函数
 
 call :initFlutter
+call :askAndExecute python
+call :askAndExecute nodejs
+call :askAndExecute golang
+
+:initFlutter
+    rem 函数
+
+call :initFlutter
+
+@REM :: 安装node包
+@REM for /f %%i in (npm.txt) do (
+@REM     npm install -g %%i
+@REM )
+
+@REM :: 安装python包
+@REM for /f %%i in (pip.txt) do (
+@REM     pip install %%i
+@REM )
+
 :: 关闭执行窗口并退出
 pause
 exit

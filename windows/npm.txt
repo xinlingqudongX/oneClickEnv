@@ -4,3 +4,4 @@ typescript@latest
 docsify-cli
 pnpm
 ts-node
+yarn

@@ -12,3 +12,4 @@ lxml
 jieba
 schedule
 svn
+beautifulsoup4
