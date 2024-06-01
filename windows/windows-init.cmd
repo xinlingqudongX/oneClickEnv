@@ -27,16 +27,32 @@ if %errorlevel% == 0 (
     echo 配置系统CMD终端编码格式
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor" /v "autorun" /t REG_SZ /d "chcp 65001>NUL"
 )
+@REM 下载函数
+:downloadFile
+set "download_url=%1"
+set "download_name=%2"
+bitsadmin /transfer download /download /priority foreground "%download_url%" %CD%/%download_name%
+@REM bitsadmin /monitor
 
 @REM 判断winget是否安装
 winget >NUL
 if %errorlevel% == 0 (
     echo 已安装winget
+    echo 当前winget版本
+    winget -v
+
+    @REM set /p answer=是否更新winget? (y/n):
+    @REM if /i "%answer%"=="y" (
+    @REM     echo 安装winget
+    @REM     call :downloadFile https://github.com/microsoft/winget-cli/releases/download/v1.7.11261/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle winget.msixbundle
+    @REM     winget.msixbundle
+    @REM     del winget.msixbundle
+    @REM )
 ) else (
     echo 安装winget
-    bitsadmin /transfer download /download /priority foreground "https://github.com/microsoft/winget-cli/releases/download/v1.7.11261/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" %CD%/winget.msixbundle
-    @REM bitsadmin /monitor
+    call :downloadFile https://github.com/microsoft/winget-cli/releases/download/v1.7.11261/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle winget.msixbundle
     winget.msixbundle
+    del winget.msixbundle
 )
 
 :: 下载程序

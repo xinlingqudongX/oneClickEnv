@@ -13,3 +13,5 @@ jieba
 schedule
 svn
 beautifulsoup4
+dbt-core
+dbt-sqlite
