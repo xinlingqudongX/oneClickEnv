@@ -34,7 +34,7 @@ if %errorlevel% == 0 (
     echo 已安装winget
 ) else (
     echo 安装winget
-    bitsadmin /transfer download /download /priority foreground "https://github.com/microsoft/winget-cli/releases/download/v1.4.3132-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" %CD%/winget.msixbundle
+    bitsadmin /transfer download /download /priority foreground "https://github.com/microsoft/winget-cli/releases/download/v1.7.11261/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" %CD%/winget.msixbundle
     @REM bitsadmin /monitor
     winget.msixbundle
 )
