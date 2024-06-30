@@ -78,6 +78,9 @@ for /f %%i in (window_developer.txt) do (
 echo registry=https://registry.npmjs.org/ >> %USERPROFILE%/.npmrc
 echo ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ >> %USERPROFILE%/.npmrc
 
+::  设置vfox的python下载加速
+setx -m VFOX_PYTHON_MIRROR  "https://repo.huaweicloud.com/python/"
+
 ::  添加Git配置
 echo [http]>> %USERPROFILE%/.gitconfig
 echo     sslVerify = false>> %USERPROFILE%/.gitconfig
@@ -89,6 +92,7 @@ echo     autocrlf = false>> %USERPROFILE%/.gitconfig
 
 :: Go环境变量配置
 go env -w GO111MODULE=on
+go env -w  GOPROXY=https://goproxy.cn,direct
 
 :: Python环境变量配置 用户环境变量
 setx "PYTHONIOENCODING" "UTF-8"
