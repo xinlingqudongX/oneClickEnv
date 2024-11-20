@@ -50,7 +50,7 @@ if %errorlevel% == 0 (
     @REM )
 ) else (
     echo 安装winget
-    call :downloadFile https://github.com/microsoft/winget-cli/releases/download/v1.7.11261/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle winget.msixbundle
+    call :downloadFile https://github.com/microsoft/winget-cli/releases/download/v1.9.25200/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle winget.msixbundle
     winget.msixbundle
     del winget.msixbundle
 )
