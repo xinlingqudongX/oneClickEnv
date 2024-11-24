@@ -1,5 +1,4 @@
 Google Chrome
-Microsoft Visual Studio Code
 Microsoft To Do: Lists, Tasks & Reminders
 便签
 7-Zip
@@ -15,3 +14,6 @@ utools
 Flutter Gallery
 Git LFS
 Wireshark
+electerm.electerm
+ByteDance.Feishu
+vfox
